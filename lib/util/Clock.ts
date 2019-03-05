@@ -1,8 +1,10 @@
 import { Port } from "./Port";
 import { setInterval } from "timers";
 
+export type NanoTime = BigInt
+
 export interface Clocked<T> {
-    nanoTime: BigInt
+    nanoTime: NanoTime
     event: T
 }
 
