@@ -1,3 +1,5 @@
+import { Port } from "./Port";
+
 export type StreamCallback<Event> = (event: Event) => void;
 
 export interface Stream<Event> {

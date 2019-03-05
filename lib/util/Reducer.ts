@@ -1,5 +1,5 @@
 import { Port } from "./Port";
-import { StreamFactory } from "./Stream";
+import { StreamFactory, Stream } from "./Stream";
 
 export type ReduceFn<State, Event, Effect> =
     (state: State, event: Event) => [State, Effect?]
@@ -11,8 +11,8 @@ export type StreamControls = {
     stop: () => void
 }
 
-export type EffectHandler<State, Effect> =
-    (effect: Effect, state: State, streamControls: StreamControls) => void
+export type EffectHandler<State, Event, Effect> =
+    (effect: Effect, state: State, streamControls: Stream<Event>) => void
 
 export function pure<State, Event>(
     reduceFn: PureReduceFn<State, Event>
@@ -28,20 +28,16 @@ export function newReducer<State, Event, Effect>(
     reduceFn: ReduceFn<State, Event, Effect>,
     effectHandler:
         void extends Effect
-        ? (undefined | EffectHandler<State, Effect>)
-        : EffectHandler<State, Effect>
+        ? (undefined | EffectHandler<State, Event, Effect>)
+        : EffectHandler<State, Event, Effect>
 ): Port<Event> {
     let state = initialState
     const stream = newStream<Event>((event: Event) => {
         const [newState, effect] = reduceFn(state, event)
         state = newState
         if (effect && effectHandler) {
-            effectHandler(effect, state, streamControls)
+            effectHandler(effect, state, stream)
         }
     })
-    const streamControls = {
-        stop: () => stream.stop()
-    }
     return stream.port;
 }
-
