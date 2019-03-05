@@ -1,12 +1,6 @@
-import { Port } from "./Port";
-import { deferred } from "./Deferred";
-
-export type StreamCallback<Event> = (event: Event) => void;
-
-export interface Stream<Event> {
-    readonly port: Port<Event>
-    readonly stop: () => void
-}
+import { Port } from "../../lib/util/Port";
+import { deferred } from "../../lib/util/Deferred";
+import { StreamCallback, Stream } from "../../lib/util/Stream";
 
 interface Nil<Event> {
     tail: Promise<Cons<Event>>
@@ -87,7 +81,9 @@ export function newStream<E>(onEvent: StreamCallback<E>): Stream<E> {
     ))
     const port: Port<E> = {
         put(event: E) {
-            list = list.append(event)
+            if (!stopped) {
+                list = list.append(event)
+            }
         }
     }
     return {

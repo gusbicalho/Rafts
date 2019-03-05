@@ -1,5 +1,5 @@
 import { Port } from "./Port";
-import { newStream } from "./Stream";
+import { StreamFactory } from "./Stream";
 
 export type ReduceFn<State, Event, Effect> =
     (state: State, event: Event) => [State, Effect?]
@@ -23,6 +23,7 @@ export function pure<State, Event>(
 }
 
 export function newReducer<State, Event, Effect>(
+    newStream: StreamFactory,
     initialState: State,
     reduceFn: ReduceFn<State, Event, Effect>,
     effectHandler:
