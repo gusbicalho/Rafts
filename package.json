@@ -1,0 +1,15 @@
+{
+  "name": "rafts",
+  "version": "0.0.1",
+  "description": "Raft implementation in TypeScript",
+  "scripts": {
+    "tsc": "tsc",
+    "demo": "ts-node-dev --respawn --transpileOnly ./demo/demo.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-node-dev": "^1.0.0-pre.32",
+    "typescript": "^3.3.3333"
+  }
+}
